@@ -55,7 +55,12 @@ function PluginHelloWorld(
   useEffect(() => {
     if (videoStreams?.user_camera?.length && !observer) {
       const obs = new ResizeObserver(() => {
-        setCameraDomElements(Array.from(document.getElementsByClassName('video-provider_list')[0].children) as HTMLDivElement[]);
+        const videoList = document.getElementsByClassName('video-provider_list')[0];
+        if (videoList) {
+          setCameraDomElements(Array.from(videoList.children ?? []) as HTMLDivElement[]);
+        } else {
+          setCameraDomElements([]);
+        }
       });
 
       const videoList = document.getElementsByClassName('video-provider_list')[0];
@@ -145,12 +150,6 @@ function PluginHelloWorld(
           }
 
           newPipWindow.addEventListener('pagehide', handlePageHide, { once: true });
-
-          // newPipWindow.window.addEventListener('resize', (e: Event) => {
-          //   (e.target as Window).window.console.log(
-          //     (e.target as Window).window.document.documentElement.clientWidth,
-          //   );
-          // });
 
           const style = document.createElement('style');
           style.textContent = cssRules;
